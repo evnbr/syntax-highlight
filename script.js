@@ -34,7 +34,7 @@ function init() {
   init_keywords();
 
   // Load script into textarea
-  $.get("/script.js", function(data){
+  $.get("script.js", function(data){
     $text_area.value = data;
     update();
   });
