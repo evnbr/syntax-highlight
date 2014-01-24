@@ -1,48 +1,27 @@
 window.onload = init;
 
-// Save document selectors
-var $text_area, $output;
-
-// Save unkown tokens (variable names)
-var tokens = [];
-var token_colors = {};
-
-var _keywords;
-
-
-// ==============================
-
-
-// Match splitters
-var rx_splitters = /[\s\+\-=\*\(\)\{\}\[\]\.;\|,\!]/g;
-
-// Reference for splitters
-var rx_splitters_string = "([\\s\\+\\-=\\*\\(\\)\\{\\}\\[\\]\\.;\\|,\\!])";
-
-// Match comments
-var rx_comments = /(\/\/(.*))\r?\n|\r/g;
-
-// var rx_strings = /("(.*?)")|('(.*?)')/g;
-// var rx_regexes = /(\/(.+?)[^\\]\/[a-z]*)/g;
-
-// Match "strings", 'strings', and /regexes/
-var rx_strings = /("(.*?)")|('(.*?)')|(\/([^\s]+?)[^\\]\/[a-z]*)/g;
-
-// Match #hex colors
-var rx_colors = /(#[0-9a-fA-F]{6})/g;
-
-// Match numbers
-var rx_numbers = /([\s\+\-=\*\(\)\{\}\[\]\.;\|,\!])([0-9]+)([\s\+\-=\*\(\)\{\}\[\]\.;\|,\!])/g;
-
-// Match valid characters: letters, numbers, _underscore, $
-// but don't let first character be a number
-var rx_allowed =  /(^[a-zA-Z_\$][a-zA-Z0-9_\$]*)/;
-
+var $text_area
+  , $output
+  , tokens = []
+  , token_colors = {}
+    // Characters that separate tokens
+  , rx_splitters = /[\s\+\-=\*\(\)\{\}\[\]\.;\|,\!]/g
+  , rx_splitters_string = "([\\s\\+\\-=\\*\\(\\)\\{\\}\\[\\]\\.;\\|,\\!])"
+    // Match comments
+  , rx_comments = /(\/\/(.*))\r?\n|\r/g
+    // Match "strings", 'strings', and /regexes/
+  , rx_strings = /("(.*?)")|('(.*?)')|(\/([^\s]+?)[^\\]\/[a-z]*)/g
+    // Match #hex colors
+  , rx_colors = /(#[0-9a-fA-F]{6})/g
+    // Match numbers
+  , rx_numbers = /([\s\+\-=\*\(\)\{\}\[\]\.;\|,\!])([0-9]+)([\s\+\-=\*\(\)\{\}\[\]\.;\|,\!])/g
+    // Match valid characters: letters, numbers, _underscore, $
+    // but don't let first character be a number
+  , rx_allowed =  /(^[a-zA-Z_\$][a-zA-Z0-9_\$]*)/
+  ;
 
 
 // ==============================
-
-
 
 function init() {
 
@@ -50,25 +29,15 @@ function init() {
   $text_area = document.querySelector("#text");
   $output = document.querySelector("#output");
 
-
-  // Synchronize scrolling
-  $text_area.onscroll = function(){
-    $output.scrollTop = $text_area.scrollTop;
-  }
-  $output.onscroll = function(){
-    $text_area.scrollTop = $output.scrollTop;
-  }
-
-  // Render theme
+  init_ui();
   init_theme();
-
-  // Assemple keywords
   init_keywords();
 
-  // Update
-  $text_area.onkeyup = update;
-
-  keywords = make_regex(_keywords,"");
+  // Load script into textarea
+  $.get("/script.js", function(data){
+    $text_area.value = data;
+    update();
+  });
 }
 
 
@@ -80,8 +49,8 @@ function update() {
   var text = $text_area.value;
   var processed = process(text);
   $output.innerHTML = processed;
-  var cursor_pos = $text_area.selectionStart;
-  console.log(cursor_pos);
+  // var cursor_pos = $text_area.selectionStart;
+  // console.log(cursor_pos);
 }
 
 
@@ -105,7 +74,8 @@ function init_theme() {
 
 function init_keywords() {
   var node = document.querySelector(".keywords");
-  _keywords = node.innerHTML.trim().split("\n");
+  var kw_list = node.innerHTML.trim().split("\n");
+  keywords = make_regex(kw_list,"");
 }
 
 
@@ -134,9 +104,7 @@ function process(string) {
   html = html.replace(rx_colors, replace_rx_colors);
   html = html.replace(rx_numbers, replace_rx_numbers);
 
-  console.log(html);
-
-  return html;
+  return html + "\n";
 }
 
 // ==============================
@@ -239,7 +207,10 @@ function replace_rx_strings(match, p1, p2, p3, offset, string) {
 }
 
 function replace_rx_colors(match, p1, p2, p3, offset, string) {
-  return "<i class='clr' style='background: " + match + "; box-shadow: 0 0 0 2px " + match + "; ' >" + match + "</i>";
+  var clr =  "<i class='clr' style='background: ";
+      clr += match + "; box-shadow: 0 0 0 2px " + match + "; ' >";
+      clr += match + "</i>";
+  return clr;
 }
 
 function replace_rx_regexes(match, p1, p2, p3, offset, string) {
@@ -253,6 +224,37 @@ function replace_rx_numbers(match, p1, p2, p3, offset, string) {
 function replace_vars(match, p1, p2, p3, offset, string) {
   var colorclass = token_colors[p2];
   return p1 + "<i class='" + colorclass + "'>" + p2 + "</i>";
+}
+
+// ==============================
+
+// User Interface
+
+function init_ui() {
+  // Update on key up
+  $text_area.onkeyup = update;
+
+  // Set up buttons
+  var $edit_btn = document.querySelector("#edit_btn");
+  var $view_btn = document.querySelector("#view_btn");
+
+  // Add click event
+  $edit_btn.onclick = function(){
+    $text_area.scrollTop = $output.scrollTop;
+    document.body.classList.remove("viewing");
+  }
+  $view_btn.onclick = function(){
+    $output.scrollTop  = $text_area.scrollTop;
+    document.body.classList.add("viewing");
+  }
+
+  // Synchronize scrolling
+  $text_area.onscroll = function(){
+    // $output.scrollTop  = $text_area.scrollTop;
+  }
+  $output.onscroll = function(){
+    // $text_area.scrollTop = $output.scrollTop;
+  }
 }
 
 
@@ -287,7 +289,10 @@ function contains(str, substr) {
 
 
 function htmlify(str) {
-  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function unquote(str) {
