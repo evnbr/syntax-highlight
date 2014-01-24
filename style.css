@@ -38,8 +38,7 @@ nav {
 #edit_btn, .viewing #view_btn {
   color: black;
   font-weight: 700;
-  border-bottom: 2px solid black;
-  -webkit-overflow-scrolling: touch; }
+  border-bottom: 2px solid black; }
 
 .viewing #edit_btn {
   color: blue;
@@ -53,7 +52,8 @@ nav {
   right: 0;
   bottom: 0;
   width: 100%;
-  padding: 2em 10%; }
+  padding: 2em 10%;
+  -webkit-overflow-scrolling: touch; }
 
 #text {
   resize: none;
