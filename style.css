@@ -122,3 +122,6 @@ nav {
 
   .title {
     display: none; } }
+@media (max-width: 400px) {
+  html {
+    font-size: 10px; } }

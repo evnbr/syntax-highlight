@@ -46,14 +46,10 @@ function update() {
   var text = $text_area.value;
   var processed = process(text);
   $output.innerHTML = processed;
-  // var cursor_pos = $text_area.selectionStart;
-  // console.log(cursor_pos);
 }
 
 // ==============================
 
-
-// (html) process(string);
 
 function process(string) {
   var html = string;
@@ -82,7 +78,7 @@ function process(string) {
 function assign_colors(string) {
 
   var split = string.split(rx_splitters);
-  
+
   var old_colors = token_colors;
   token_colors = get_uniques(split);
   tokens = Object.keys(token_colors).sort();
@@ -107,9 +103,6 @@ function assign_colors(string) {
 
 // ==============================
 
-
-// (dictionary) get_unique_dictionary(array)
-
 function get_uniques(arr) {
   var uniques = {};
   for (var i = arr.length - 1; i >= 0; i--) {
@@ -122,8 +115,6 @@ function get_uniques(arr) {
   };
   return uniques;
 }
-
-
 
 // ==============================
 
@@ -223,8 +214,6 @@ function init_ui() {
     // $text_area.scrollTop = $output.scrollTop;
   }
 }
-
-
 
 // ==============================
 
