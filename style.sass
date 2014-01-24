@@ -1,0 +1,94 @@
+// Global
+
+*
+  margin: 0
+  padding: 0
+  font: inherit
+  -webkit-box-sizing: border-box
+  -moz-box-sizing: border-box
+  box-sizing: border-box
+  list-style: none
+
+html
+  font: 14px/1.3 "Source Code Pro", "Fira Mono OT", monospace
+
+body
+  color: black
+  background: white
+
+*:focus
+  outline: none
+
+// UI
+
+#text
+  resize: none
+  position: absolute
+  top: 0
+  left: 0
+  bottom: 0
+  width: 50%
+  padding: 2em
+  box-shadow: none
+  box-shadow: inset 0px 0px 0px 1px #eee
+  border: 0
+  // border: 1px solid #eee
+  color: gray
+
+
+$bold: 600
+$normal: 400
+
+#output
+  position: absolute
+  top: 0
+  right: 0
+  bottom: 0
+  width: 50%
+  color: #7E7D7C // #A59086
+  white-space: pre-wrap
+  overflow: scroll
+  padding: 2em
+  font-weight: $normal
+  // pointer-events: none
+
+#template
+  display: none
+
+// Syntax
+
+.num
+  font-weight: $bold
+  color: #444
+
+[class*=var]
+  font-weight: $bold
+
+
+.clr
+  border-radius: 1px
+  color: white
+  font-weight: 400
+
+.str,  .str i
+  color: rgb(209, 0, 0) !important
+  font-weight: 400 !important
+
+.reg,  .reg i
+  color: #E97900
+  font-weight: 500
+
+.cmnt, .cmnt i
+  color: #8DB8AA !important
+  font-weight: 400 !important
+  // font-style: italic
+
+@media (max-width: 600px)
+  #text 
+    display: none
+
+  #output 
+    left: 0
+    width: 100%
+    height: 100%
+  

@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  list-style: none; }
+
+html {
+  font: 14px/1.3 "Source Code Pro", "Fira Mono OT", monospace; }
+
+body {
+  color: black;
+  background: white; }
+
+*:focus {
+  outline: none; }
+
+#text {
+  resize: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 50%;
+  padding: 2em;
+  box-shadow: none;
+  box-shadow: inset 0px 0px 0px 1px #eeeeee;
+  border: 0;
+  color: gray; }
+
+#output {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  color: #7e7d7c;
+  white-space: pre-wrap;
+  overflow: scroll;
+  padding: 2em;
+  font-weight: 400; }
+
+#template {
+  display: none; }
+
+.num {
+  font-weight: 600;
+  color: #444444; }
+
+[class*=var] {
+  font-weight: 600; }
+
+.clr {
+  border-radius: 1px;
+  color: white;
+  font-weight: 400; }
+
+.str, .str i {
+  color: #d10000 !important;
+  font-weight: 400 !important; }
+
+.reg, .reg i {
+  color: #e97900;
+  font-weight: 500; }
+
+.cmnt, .cmnt i {
+  color: #8db8aa !important;
+  font-weight: 400 !important; }
+
+@media (max-width: 600px) {
+  #text {
+    display: none; }
+
+  #output {
+    left: 0;
+    width: 100%;
+    height: 100%; } }
