@@ -41,20 +41,10 @@ nav
     margin-right: 1em
 
 
-#edit_btn, .viewing #view_btn  
-  color: black
-  font-weight: 700
-  border-bottom: 2px solid black
-
-.viewing #edit_btn
-  color: blue
-  border: 0
-  font-weight: normal
-
 $bold: 600
 $normal: 400
 
-#text, #output
+#output
   position: fixed
   top: 40px
   left: 0
@@ -62,32 +52,13 @@ $normal: 400
   bottom: 0
   width: 100%
   padding: 2em 10%
-
-#text
-  resize: none
-  box-shadow: none
-  border: 0
-  // border: 1px solid #eee
-  color: gray
-  -webkit-transition: opacity 0.2s
-  .viewing &
-    pointer-events: none
-    opacity: 0
-
-
-#output
   color: #7E7D7C // #A59086
   white-space: pre-wrap
   overflow: scroll
   padding: 2em 10%
   font-weight: $normal
-  pointer-events: none
-  opacity: 0
   -webkit-transition: opacity 0.2s
   -webkit-overflow-scrolling: touch
-  .viewing &
-    pointer-events: all
-    opacity: 1
 
 #template
   display: none
@@ -124,19 +95,17 @@ $normal: 400
   opacity: 0.5
 
 @media (min-width: 1400px)
-  #text, #output
+  #output
     padding: 2em 20%
   nav
     padding: 0 20%
 
 @media (max-width: 700px)
-  #text, #output
+  #output
     padding: 1em
   nav
     padding: 0 1em
-  .title
-    display: none
 
 @media (max-width: 400px)
   html
-    font-size: 10px
+    font-size: 12px
