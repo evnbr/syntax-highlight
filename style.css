@@ -52,8 +52,7 @@ nav {
   right: 0;
   bottom: 0;
   width: 100%;
-  padding: 2em 10%;
-  -webkit-overflow-scrolling: touch; }
+  padding: 2em 10%; }
 
 #text {
   resize: none;
@@ -73,7 +72,8 @@ nav {
   font-weight: 400;
   pointer-events: none;
   opacity: 0;
-  -webkit-transition: opacity 0.2s; }
+  -webkit-transition: opacity 0.2s;
+  -webkit-overflow-scrolling: touch; }
   .viewing #output {
     pointer-events: all;
     opacity: 1; }
