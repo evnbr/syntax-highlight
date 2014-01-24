@@ -1,9 +1,9 @@
 window.onload = init;
 
-var $text_area
-  , $output
+var $editable
   , tokens = []
   , token_colors = {}
+  , refresh_timer
     // Characters that separate tokens
   , rx_splitters = /[\s\+\-=\*\(\)\{\}\[\]\.;\|,\!]/g
   , rx_splitters_string = "([\\s\\+\\-=\\*\\(\\)\\{\\}\\[\\]\\.;\\|,\\!])"
@@ -26,8 +26,7 @@ var $text_area
 function init() {
 
   // Get selectors
-  $text_area = document.querySelector("#text");
-  $output = document.querySelector("#output");
+  $editable = document.querySelector("#output");
 
   init_ui();
   init_theme();
@@ -35,7 +34,8 @@ function init() {
 
   // Load script into textarea
   $.get("script.js", function(data){
-    $text_area.value = data;
+    $editable.innerHTML = data;
+    $editable.focus();
     update();
   });
 }
@@ -43,9 +43,29 @@ function init() {
 // ==============================
 
 function update() {
-  var text = $text_area.value;
-  var processed = process(text);
-  $output.innerHTML = processed;
+
+  clearTimeout(refresh_timer);
+  refresh_timer = setTimeout(function(){
+
+    // Insert cursor placeholder
+    insertTextAtCursor("@" + "@");
+
+    // Broken in Firefox!
+    // will use textContent instead of innerText, which doesn't
+    // correctly preserve the whitespace
+    var text = $editable.innerText || $editable.textContent;
+
+    // Find cursor placeholder
+    var pos = text.indexOf("@" + "@");
+    var text = text.replace("@" + "@", "");
+
+    // Process text
+    $editable.innerHTML = process(text);
+
+    // Restore cursor position
+    setSelectionRange($editable, pos, pos);
+
+  }, 300);
 }
 
 // ==============================
@@ -65,8 +85,8 @@ function process(string) {
           .replace(rx_strings, replace_rx_strings)
           .replace(rx_tokens, replace_tokens)
           .replace(rx_comments, replace_rx_comments)
-          .replace(rx_colors, replace_rx_colors)
           .replace(rx_numbers, replace_rx_numbers)
+          .replace(rx_colors, replace_rx_colors)
           ;
 
   return html + "\n";
@@ -91,9 +111,9 @@ function assign_colors(string) {
     var index = parseInt( (percent * 132) + (Math.random() * 0) );
 
     if (index < 0) index = 0;
-    else if (index > 99) index = 132 - index;
+    else if (index > 99) index = index - 99;
     else if (index > 66) index = index - 66;
-    else if (index > 33) index = 66 - index;
+    else if (index > 33) index = index - 33;
 
     var color = "var" + index;
     token_colors[tokens[i]] = color;
@@ -190,29 +210,8 @@ function init_keywords() {
 
 function init_ui() {
   // Update on key up
-  $text_area.onkeyup = update;
-
-  // Set up buttons
-  var $edit_btn = document.querySelector("#edit_btn");
-  var $view_btn = document.querySelector("#view_btn");
-
-  // Add click event
-  $edit_btn.onclick = function(){
-    $text_area.scrollTop = $output.scrollTop;
-    document.body.classList.remove("viewing");
-  }
-  $view_btn.onclick = function(){
-    $output.scrollTop  = $text_area.scrollTop;
-    document.body.classList.add("viewing");
-  }
-
-  // Synchronize scrolling
-  $text_area.onscroll = function(){
-    // $output.scrollTop  = $text_area.scrollTop;
-  }
-  $output.onscroll = function(){
-    // $text_area.scrollTop = $output.scrollTop;
-  }
+  // throttled this to only a few times a second, replacing html is HEAVY
+  $editable.onkeyup = update;
 }
 
 // ==============================
@@ -253,4 +252,68 @@ function htmlify(str) {
 
 function unquote(str) {
   return String(str).replace(/"/g, '&quot;');
+}
+
+
+// ==============================
+
+// Text selection management
+
+function insertTextAtCursor(text) { 
+    var sel, range, html; 
+    sel = window.getSelection();
+    range = sel.getRangeAt(0); 
+    range.deleteContents(); 
+    var textNode = document.createTextNode(text);
+    range.insertNode(textNode);
+    range.setStartAfter(textNode);
+    sel.removeAllRanges();
+    sel.addRange(range);        
+}
+
+function getTextNodesIn(node) {
+    var textNodes = [];
+    if (node.nodeType == 3) {
+        textNodes.push(node);
+    } else {
+        var children = node.childNodes;
+        for (var i = 0, len = children.length; i < len; ++i) {
+            textNodes.push.apply(textNodes, getTextNodesIn(children[i]));
+        }
+    }
+    return textNodes;
+}
+
+function setSelectionRange(el, start, end) {
+    if (document.createRange && window.getSelection) {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var textNodes = getTextNodesIn(el);
+        var foundStart = false;
+        var charCount = 0, endCharCount;
+
+        for (var i = 0, textNode; textNode = textNodes[i++]; ) {
+            endCharCount = charCount + textNode.length;
+            if (!foundStart && start >= charCount && (start < endCharCount || (start == endCharCount && i < textNodes.length))) {
+                range.setStart(textNode, start - charCount);
+                foundStart = true;
+            }
+            if (foundStart && end <= endCharCount) {
+                range.setEnd(textNode, end - charCount);
+                break;
+            }
+            charCount = endCharCount;
+        }
+
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (document.selection && document.body.createTextRange) {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.collapse(true);
+        textRange.moveEnd("character", end);
+        textRange.moveStart("character", start);
+        textRange.select();
+    }
 }

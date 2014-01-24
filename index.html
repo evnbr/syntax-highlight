@@ -21,24 +21,19 @@
       href="favicon.png">
 
 </head>
-<body class="viewing">
+<body>
 
   <nav>
-    <a id="edit_btn" href="#">Edit</a>
-    <a id="view_btn" class="selected" href="#">Highlighted</a>
-    <span style="float:right">
-      <span class="title">
-        What is this?
-        &mdash;
-      </span>
-      <a href="https://medium.com/p/3a6db2743a1e/">Explanation</a>
-    </style>
+    <span class="title">
+      Coding in color
+      &mdash;
+    </span>
+    <a href="https://medium.com/p/3a6db2743a1e/">Explanation</a>
+    <a href="https://github.com/evanbrooks/syntax-highlight">Github</a>
   </nav>
 
-  <textarea id="text" spellcheck="false"></textarea>
-
-  <div id="output">
-  </div>
+  <pre id="output" contenteditable spellcheck="false">
+  </pre>
 
 
 <div id="template">
@@ -87,6 +82,33 @@ console
 log
 selectionStart
 charAt
+true
+false
+nodeType
+childNodes
+push
+apply
+window
+getSelection
+createRange
+setEnd
+setStart
+collapse
+moveEnd
+moveStart
+body
+createTextRange
+removeAllRanges
+moveToElementText
+selection
+break
+selectNodeContents
+getRangeAt
+deleteContents
+insertNode
+setStartAfter
+addRange
+select
 </div>
 
 <div class="colortheme">
@@ -128,6 +150,6 @@ charAt
 
 </div>
 
-  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="jquery.min.js"></script>
   <script type="text/javascript" src="script.js"></script>
 </body>

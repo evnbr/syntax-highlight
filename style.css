@@ -35,48 +35,21 @@ nav {
     text-decoration: none;
     margin-right: 1em; }
 
-#edit_btn, .viewing #view_btn {
-  color: black;
-  font-weight: 700;
-  border-bottom: 2px solid black; }
-
-.viewing #edit_btn {
-  color: blue;
-  border: 0;
-  font-weight: normal; }
-
-#text, #output {
+#output {
   position: fixed;
   top: 40px;
   left: 0;
   right: 0;
   bottom: 0;
   width: 100%;
-  padding: 2em 10%; }
-
-#text {
-  resize: none;
-  box-shadow: none;
-  border: 0;
-  color: gray;
-  -webkit-transition: opacity 0.2s; }
-  .viewing #text {
-    pointer-events: none;
-    opacity: 0; }
-
-#output {
+  padding: 2em 10%;
   color: #7e7d7c;
   white-space: pre-wrap;
   overflow: scroll;
   padding: 2em 10%;
   font-weight: 400;
-  pointer-events: none;
-  opacity: 0;
   -webkit-transition: opacity 0.2s;
   -webkit-overflow-scrolling: touch; }
-  .viewing #output {
-    pointer-events: all;
-    opacity: 1; }
 
 #template {
   display: none; }
@@ -109,20 +82,17 @@ nav {
   opacity: 0.5; }
 
 @media (min-width: 1400px) {
-  #text, #output {
+  #output {
     padding: 2em 20%; }
 
   nav {
     padding: 0 20%; } }
 @media (max-width: 700px) {
-  #text, #output {
+  #output {
     padding: 1em; }
 
   nav {
-    padding: 0 1em; }
-
-  .title {
-    display: none; } }
+    padding: 0 1em; } }
 @media (max-width: 400px) {
   html {
-    font-size: 10px; } }
+    font-size: 12px; } }
