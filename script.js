@@ -40,10 +40,7 @@ function init() {
   });
 }
 
-
-
 // ==============================
-
 
 function update() {
   var text = $text_area.value;
@@ -52,32 +49,6 @@ function update() {
   // var cursor_pos = $text_area.selectionStart;
   // console.log(cursor_pos);
 }
-
-
-// ==============================
-
-
-function init_theme() {
-  var node = document.querySelector(".colortheme");
-  var colors = node.innerHTML.trim().split("\n");
-  // colors = shuffle(colors);
-  
-  var css = "";
-  for (var i = 0; i < colors.length; i++) {
-    css += ".var" + i + "{color:" + colors[i] + ";} ";
-  }
-  add_style_sheet(css);
-}
-
-// ==============================
-
-
-function init_keywords() {
-  var node = document.querySelector(".keywords");
-  var kw_list = node.innerHTML.trim().split("\n");
-  keywords = make_regex(kw_list,"");
-}
-
 
 // ==============================
 
@@ -89,20 +60,18 @@ function process(string) {
 
   assign_colors(string);
 
-  var variable_regex = make_regex(tokens, "g");
+  var rx_tokens = make_regex(tokens, "g");
 
 
   html = htmlify(html);
-  html = html.replace(rx_strings, replace_rx_strings);
 
-  // html = html.replace(rx_regexes, replace_rx_regexes);
-
-  // html = html.replace(keywords, replace_keywords);
-
-  html = highlight_variables(html, variable_regex);
-  html = html.replace(rx_comments, replace_rx_comments);
-  html = html.replace(rx_colors, replace_rx_colors);
-  html = html.replace(rx_numbers, replace_rx_numbers);
+  html = html
+          .replace(rx_strings, replace_rx_strings)
+          .replace(rx_tokens, replace_tokens)
+          .replace(rx_comments, replace_rx_comments)
+          .replace(rx_colors, replace_rx_colors)
+          .replace(rx_numbers, replace_rx_numbers)
+          ;
 
   return html + "\n";
 }
@@ -113,8 +82,8 @@ function process(string) {
 function assign_colors(string) {
 
   var split = string.split(rx_splitters);
-
-  old_colors = token_colors;
+  
+  var old_colors = token_colors;
   token_colors = get_uniques(split);
   tokens = Object.keys(token_colors).sort();
 
@@ -132,13 +101,6 @@ function assign_colors(string) {
 
     var color = "var" + index;
     token_colors[tokens[i]] = color;
-
-    // var color;
-    // if (old_colors[key]) color = old_colors[key];
-    // else color = "var" + index;
-    // token_colors[key] = color;
-    // index = index + 1;
-    // if (index > 34) index = 1;
   }
 }
 
@@ -178,22 +140,6 @@ function make_regex(arr, flags) {
 // ==============================
 
 
-
-function highlight_variables(str, regex) {
-  var replaced = str.replace(regex, replace_vars);
-  return replaced;
-}
-
-
-// ==============================
-
-
-
-
-function replace_keywords(match, p1, p2, p3, offset, string) {
-  return p1 + "<i class='kw1'>" + p2 + "</i>" + p3;
-}
-
 function replace_rx_comments(match, p1, p2, p3, offset, string) {
   return "<i class='cmnt'>" + match + "</i>";
 }
@@ -221,9 +167,30 @@ function replace_rx_numbers(match, p1, p2, p3, offset, string) {
   return p1 + "<i class='num'>" + p2 + "</i>" + p3;
 }
 
-function replace_vars(match, p1, p2, p3, offset, string) {
+function replace_tokens(match, p1, p2, p3, offset, string) {
   var colorclass = token_colors[p2];
   return p1 + "<i class='" + colorclass + "'>" + p2 + "</i>";
+}
+
+// ==============================
+
+function init_theme() {
+  var node = document.querySelector(".colortheme");
+  var colors = node.innerHTML.trim().split("\n");
+  
+  var css = "";
+  for (var i = 0; i < colors.length; i++) {
+    css += ".var" + i + "{color:" + colors[i] + ";} ";
+  }
+  add_style_sheet(css);
+}
+
+// ==============================
+
+function init_keywords() {
+  var node = document.querySelector(".keywords");
+  var kw_list = node.innerHTML.trim().split("\n");
+  keywords = make_regex(kw_list,"");
 }
 
 // ==============================
@@ -298,26 +265,3 @@ function htmlify(str) {
 function unquote(str) {
   return String(str).replace(/"/g, '&quot;');
 }
-
-function shuffle(array) {
-  var currentIndex = array.length
-    , temporaryValue
-    , randomIndex
-    ;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}
-
