@@ -57,7 +57,7 @@ function update() {
 
     // Find cursor placeholder
     var pos = text.indexOf("@" + "@");
-    var text = text.replace("@" + "@", "");
+    text = text.replace("@" + "@", "");
 
     // Process text
     $editable.innerHTML = process(text);
