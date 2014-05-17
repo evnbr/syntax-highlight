@@ -15,11 +15,15 @@
     name="apple-mobile-web-app-status-bar-style"
     content="black-translucent"/>
   <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" 
-      type="image/png" 
-      href="favicon.png">
-
+  <link id="themeStyle" rel="stylesheet" href="style-light.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+  #themeOption {
+    float: right;
+    margin-right: 10px;
+    margin-top: 8px;
+  }
+  </style>
 </head>
 <body>
 
@@ -30,6 +34,10 @@
     </span>
     <a href="https://medium.com/p/3a6db2743a1e/">Explanation</a>
     <a href="https://github.com/evanbrooks/syntax-highlight">Github</a>
+    <select id="themeOption">
+      <option value="light">Light Theme</option>
+      <option value="dark">Dark Theme</option>
+    </select>
   </nav>
 
   <pre id="output" contenteditable spellcheck="false">
