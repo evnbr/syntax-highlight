@@ -317,3 +317,15 @@ function setSelectionRange(el, start, end) {
         textRange.select();
     }
 }
+
+var theme = "light";
+var themeOption = document.getElementById("themeOption");
+var themeStyle = document.getElementById("themeStyle");
+themeOption.addEventListener("change", function() {
+    if (this.value == "light") {
+        themeStyle.href = "style-light.css";
+    }
+    else {
+        themeStyle.href = "style-dark.css";
+    }
+});
