@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+  <title>Semantic Highlighting</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport"
+        content="width=device-width,
+                initial-scale=1.0,
+                maximum-scale=1.0,
+                user-scalable=no"/>
+  <meta name="apple-mobile-web-app-capable"
+        content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"/>
+
+  <link rel="icon" 
+      type="image/png" 
+      href="favicon.png">
+
+  <!--
+  ____________________________________
+
+  S T Y L E S H E E T S
+
+  -->
+  <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="style/codemirror-tweaked.css">
+  <link rel="stylesheet" href="style/theme.css">
+  <link rel="stylesheet" href="style/style.css">
+</head>
+
+
+
+
+
+<body class="dark-theme fancy-comments cm-mode-js">
+
+  <nav>
+    <p>
+      This demo accompanies the article <a href="https://medium.com/p/3a6db2743a1e/">Coding in color.</a> It also demonstrates some simple comment interpretation. Multiline comments are seen as blocks that divide the file into sections. Comments that seem like notes in plain text are highlighted, and comments that seem like code are made less prominent ("commented out").
+    </p>
+    <p>
+      <label><input type="checkbox" id="themebtn" />&nbsp; Light theme</label><br>
+      <label><input type="checkbox" id="commentsbtn" checked/>&nbsp; Fancy comments</label>
+    </p>
+    <p>
+      <a href="http://brooks.io">
+        brooks.io
+      </a> —
+      <a href="https://github.com/evanbrooks/syntax-highlight">
+        Github
+      </a>
+    </p>
+  </nav>
+
+  <textarea id="code">
+  </textarea>
+
+  <!--
+  ____________________________________
+
+  S C R I P T S
+
+  -->
+  
+  <!-- libs -->
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="script/husl.js"></script>
+
+  <!-- CodeMirror -->
+  <script src="script/cm4.1/lib/codemirror.js"></script>
+  <script src="script/cm-semantic-javascript.js"></script>
+  <script src="script/cm4.1/addon/comment/comment.js"></script>
+  <script src="script/cm4.1/keymap/sublime.js"></script>
+
+  <!-- app -->
+  <script src="script/semantic.js"></script>
+  <script src="script/main.js"></script>
+
+</body>
